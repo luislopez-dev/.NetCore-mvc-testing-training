@@ -6,10 +6,14 @@ namespace EmployeesApp.Validation
     private const int middlePartLength = 10;
     private const int lastPartLength = 2;
 
+    
     public bool IsValid(string accountNumber)
     {
         var firstDelimiter = accountNumber.IndexOf('-');
         var secondDelimiter = accountNumber.LastIndexOf('-');
+
+        if (firstDelimiter == -1 || (firstDelimiter == secondDelimiter))
+            throw new ArgumentException();
 
         if (firstDelimiter == -1 || secondDelimiter == -1)
             throw new ArgumentException();
