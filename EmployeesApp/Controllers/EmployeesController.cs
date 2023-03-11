@@ -29,7 +29,7 @@ namespace EmployeesApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Name,AccountNumber,Age")] Employee employee)
+        public IActionResult Create([Bind("Name, AccountNumber, Age")] Employee employee)
         {
             if(!ModelState.IsValid)
             {
@@ -49,5 +49,7 @@ namespace EmployeesApp.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+
     }
 }
