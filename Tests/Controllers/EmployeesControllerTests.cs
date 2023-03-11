@@ -86,10 +86,8 @@ public class EmployeesControllerTests
             Age = 32,
             AccountNumber = "123-4543234576-23"
         };
-
-        var employeez = new Employee { Age = 25, AccountNumber = "255-8547963214-41" }; 
-
-        _controller.Create(employeez);
+        
+        _controller.Create(employee);
 
         _mockRepo.Verify(x => x.CreateEmployee(It.IsAny<Employee>()), Times.Once);
 

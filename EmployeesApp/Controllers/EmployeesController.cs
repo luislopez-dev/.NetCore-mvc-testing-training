@@ -35,11 +35,13 @@ namespace EmployeesApp.Controllers
             {
                 return View(employee);
             }
+            
             if (!_validation.IsValid(employee.AccountNumber))
             {
               ModelState.AddModelError("AccountNumber", "Account Number is invalid");
               return View(employee);
             }
+            
             _repo.CreateEmployee(employee);
             return RedirectToAction(nameof(Index));
         }

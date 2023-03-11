@@ -11,7 +11,6 @@ builder.Services.AddDbContext<EmployeeContext>(opts =>
 
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
-
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
