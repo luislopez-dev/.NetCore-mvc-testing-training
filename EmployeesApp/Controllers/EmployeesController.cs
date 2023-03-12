@@ -14,6 +14,7 @@ namespace EmployeesApp.Controllers
         public EmployeesController(IEmployeeRepository repo)
         {
             _repo = repo;
+            _validation = new AccountNumberValidation();
         }
 
         public IActionResult Index()
@@ -29,19 +30,19 @@ namespace EmployeesApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Name, AccountNumber, Age")] Employee employee)
+        public IActionResult Create([Bind("Name,AccountNumber,Age")] Employee employee)
         {
             if(!ModelState.IsValid)
             {
                 return View(employee);
             }
-            
+
             if (!_validation.IsValid(employee.AccountNumber))
             {
-              ModelState.AddModelError("AccountNumber", "Account Number is invalid");
-              return View(employee);
+                ModelState.AddModelError("AccountNumber", "Account Number is invalid");
+                return View(employee);
             }
-            
+
             _repo.CreateEmployee(employee);
             return RedirectToAction(nameof(Index));
         }
@@ -51,7 +52,5 @@ namespace EmployeesApp.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-
     }
 }

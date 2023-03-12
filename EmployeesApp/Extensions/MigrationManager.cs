@@ -17,7 +17,8 @@ namespace EmployeesApp.Extensions
                 {
                     try
                     {
-                        appContext.Database.Migrate();
+                        if (appContext.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory")
+                            appContext.Database.Migrate();
                     }
                     catch (Exception ex)
                     {
