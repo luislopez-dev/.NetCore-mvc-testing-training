@@ -6,66 +6,47 @@ namespace UITests;
 public class AutomatedUITests : IDisposable
 {
     private readonly IWebDriver _driver;
+    private readonly EmployeePage _page;
 
-    public AutomatedUITests() => _driver = new ChromeDriver();
-
-    public void Dispose() 
+    public AutomatedUITests()
     {
-        _driver.Quit(); 
-        _driver.Dispose(); 
+        _driver = new ChromeDriver();
+        _page = new EmployeePage(_driver);
+        _page.Navigate();
     }
-    
-    [Fact] 
-    public void Create_WhenExecuted_ReturnsCreateView() 
-    { 
-        _driver.Navigate()
-            .GoToUrl("https://localhost:5001/Employees/Create"); 
-            
-        Assert.Equal("Create - EmployeesApp", _driver.Title); 
-        Assert.Contains("Please provide a new employee data", _driver.PageSource);
+
+    [Fact]
+    public void Create_WhenExecuted_ReturnsCreateView()
+    {
+        Assert.Equal("Create - EmployeesApp", _page.Title);
+        Assert.Contains("Please provide a new employee data", _page.Source);
     }
-    
-    [Fact] 
-    public void Create_WrongModelData_ReturnsErrorMessage() 
-    { 
-        _driver.Navigate()
-            .GoToUrl("https://localhost:5001/Employees/Create"); 
-            
-        _driver.FindElement(By.Id("Name"))
-            .SendKeys("Test Employee"); 
-            
-        _driver.FindElement(By.Id("Age"))
-            .SendKeys("34"); 
-            
-        _driver.FindElement(By.Id("Create"))
-            .Click(); 
-            
-        var errorMessage = _driver.FindElement(By.Id("AccountNumber-error")).Text; 
-            
-        Assert.Equal("Account number is required", errorMessage); 
+
+    [Fact]
+    public void Create_WrongModelData_ReturnsErrorMessage()
+    {
+        _page.PopulateName("New Name");
+        _page.PopulateAge("34");
+        _page.ClickCreate();
+        Assert.Equal("Account number is required", _page.AccountNumberErrorMessage);
     }
-    
-    [Fact] 
-    public void Create_WhenSuccessfullyExecuted_ReturnsIndexViewWithNewEmployee() 
-    { 
-        _driver.Navigate()
-            .GoToUrl("https://localhost:5001/Employees/Create"); 
-                
-        _driver.FindElement(By.Id("Name"))
-            .SendKeys("Another Test Employee "); 
-                
-        _driver.FindElement(By.Id("Age"))
-            .SendKeys("34"); 
-                
-        _driver.FindElement(By.Id("AccountNumber"))
-            .SendKeys("123-9384613085-58"); 
-                
-        _driver.FindElement(By.Id("Create"))
-            .Click(); 
-                
-        Assert.Equal("Index - EmployeesApp", _driver.Title); 
-        Assert.Contains("Another Test Employee ", _driver.PageSource); 
-        Assert.Contains("34", _driver.PageSource); 
-        Assert.Contains("123-9384613085-58", _driver.PageSource); 
+
+    [Fact]
+    public void Create_WhenSuccessfullyExecuted_ReturnsIndexViewWithNewEmployee()
+    {
+        _page.PopulateName("New Name");
+        _page.PopulateAge("34");
+        _page.PopulateAccountNumber("123-9384613085-58");
+        _page.ClickCreate();
+        Assert.Equal("Index - EmployeesApp", _page.Title);
+        Assert.Contains("New Name", _page.Source);
+        Assert.Contains("34", _page.Source);
+        Assert.Contains("123-9384613085-58", _page.Source);
+    }
+
+    public void Dispose()
+    {
+        _driver.Quit();
+        _driver.Dispose();
     }
 }
