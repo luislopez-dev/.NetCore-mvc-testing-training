@@ -38,6 +38,11 @@ namespace IntegrationTests
                         throw;
                     }
                 }
+                services.AddAntiforgery(t =>
+                {
+                    t.Cookie.Name = AntiForgeryTokenExtractor.AntiForgeryCookieName;
+                    t.FormFieldName = AntiForgeryTokenExtractor.AntiForgeryFieldName;
+                });
             });
         }
     }
